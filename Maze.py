@@ -26,6 +26,9 @@ RIGHT = 'R'
 LEFT = 'L'
 ACTIONS = [UP, DOWN, RIGHT, LEFT]
 
+LEARNING_RATE = 1
+DISCOUNT_FACTOR = 0.5
+
 class Environment:
     def __init__(self, text):
         self.__states = {}
@@ -56,6 +59,7 @@ class Environment:
     # On met à jour l'état de l'agent, on lui donne sa récompense
     def apply(self, agent, action):
         state = agent.state
+        new_state = (-1, -1)
         if action == UP:
             new_state = (state[0] - 1, state[1])
         if action == DOWN:
@@ -97,8 +101,9 @@ class Agent:
         # QTable update
         # Q(s, a) <- Q(s, a) + learning_rate * [reward + discount_factor * max(qtable[a]) - Q(s, a)]
         maxQ = max(self.__qtable[new_state].values())
-        LEARNING_RATE = 1
-        DISCOUNT_FACTOR = 0.5
+        # Moved in constants
+        # LEARNING_RATE = 1
+        # DISCOUNT_FACTOR = 0.5
 
         self.__qtable[self.__state][action] += LEARNING_RATE * \
                         (reward + DISCOUNT_FACTOR * maxQ - self.__qtable[self.__state][action])
