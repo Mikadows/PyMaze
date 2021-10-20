@@ -77,6 +77,7 @@ class Environment:
         else:
             reward = REWARD_OUT
         agent.update(action, state, reward)
+        return reward
 
 class Agent:
     def __init__(self, environment):
@@ -126,15 +127,34 @@ class Agent:
     def qtable(self):
         return self.__qtable
 
+    def reset(self, environment):
+        self.__state = environment.start
+
 if __name__ == '__main__':
     env = Environment(MAZE)
     print(env.states)
 
     agent = Agent(env)
 
-    for i in range(3):
+    # for i in range(3):
+    iteration = 0
+    while agent.state != env.goal:
+        iteration += 1
         action = agent.best_action()
-        print(action)
-        env.apply(agent, action)
-        print(agent.state, agent.score)
-        print(agent.qtable)
+        # print(action)
+        reward = env.apply(agent, action)
+        print(iteration, agent.state, agent.score, reward)
+        # print(agent.qtable)
+
+    agent.reset(env)
+
+    print()
+
+    iteration = 0
+    while agent.state != env.goal:
+        iteration += 1
+        action = agent.best_action()
+        # print(action)
+        reward = env.apply(agent, action)
+        print(iteration, agent.state, agent.score, reward)
+        # print(agent.qtable)
